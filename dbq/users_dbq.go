@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"iam_backend/database"
+	"iam_backend/db"
 	users "iam_backend/models"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,7 +19,7 @@ type UserDBQ struct {
 }
 
 // NewUserDBQ creates a new instance of UserDBQ
-func NewUserDBQ(db *database.Database) *UserDBQ {
+func NewUserDBQ(db *db.Database) *UserDBQ {
 	return &UserDBQ{
 		collection: db.Database.Collection("users"),
 	}
