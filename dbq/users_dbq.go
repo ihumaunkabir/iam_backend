@@ -60,7 +60,7 @@ func (r *UserDBQ) FindByID(ctx context.Context, id string) (*users.User, error) 
 
 // FindByUsernameOrEmail finds a user by username or email
 func (r *UserDBQ) FindByUsernameOrEmail(ctx context.Context, username, email string) (*users.User, error) {
-	var user models.User
+	var user users.User
 	err := r.collection.FindOne(ctx, bson.M{
 		"$or": []bson.M{
 			{"username": username},
