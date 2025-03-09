@@ -89,17 +89,6 @@ func (c *UserController) GetUserByID(ctx context.Context, userID string) (*model
 	return user, nil
 }
 
-// UpdateUserRoles updates roles for a user
-func (c *UserController) UpdateUserRoles(ctx context.Context, userID string, roles []string) error {
-	user, err := c.userRepo.FindByID(ctx, userID)
-	if err != nil {
-		return err
-	}
-
-	user.Roles = roles
-	return c.userRepo.Update(ctx, user)
-}
-
 // DeactivateUser deactivates a user account
 func (c *UserController) DeactivateUser(ctx context.Context, userID string) error {
 	user, err := c.userRepo.FindByID(ctx, userID)
