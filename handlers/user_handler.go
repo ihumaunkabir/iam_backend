@@ -135,3 +135,76 @@ func UpdateUserRolesHandler(userController *controllers.UserController) gin.Hand
 		})
 	}
 }
+
+// DeactivateUserHandler deactivates a user account
+func DeactivateUserHandler(userController *controllers.UserController) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userID := c.Param("id")
+		if userID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
+			return
+		}
+
+		err := userController.DeactivateUser(c.Request.Context(), userID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "User account deactivated successfully",
+		})
+	}
+}
+
+// ReactivateUserHandler reactivates a user account
+func ReactivateUserHandler(userController *controllers.UserController) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userID := c.Param("id")
+		if userID == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
+			return
+		}
+
+		err := userController.ReactivateUser(c.Request.Context(), userID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "User account reactivated successfully",
+		})
+	}
+}
+
+// ChangePasswordHandler handles password changes
+func ChangePasswordHandler(userController *controllers.UserController) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var passwordRequest struct {
+			UserID      string `json:"user_id" binding:"required"`
+			OldPassword string `json:"old_password" binding:"required"`
+			NewPassword string `json:"new_password" binding:"required,min=6"`
+		}
+
+		if err := c.ShouldBindJSON(&passwordRequest); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		err := userController.ChangePassword(
+			c.Request.Context(),
+			passwordRequest.UserID,
+			passwordRequest.OldPassword,
+			passwordRequest.NewPassword,
+		)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Password changed successfully",
+		})
+	}
+}
