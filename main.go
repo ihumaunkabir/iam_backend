@@ -1,4 +1,4 @@
-package iambackend
+package main
 import "fmt"
 func main(){
 
