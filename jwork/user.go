@@ -2,6 +2,7 @@ package jwork
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	models "iam_backend/models"
@@ -70,4 +71,20 @@ func (c *UserController) UpdateUserRoles(ctx context.Context, userID string, rol
 
 	user.Roles = roles
 	return c.userRepo.Update(ctx, user)
+}
+
+// GetUserByID retrieves a user by their ID
+func (c *UserController) GetUserByID(ctx context.Context, userID string) (*models.User, error) {
+	// Validate input
+	if userID == "" {
+		return nil, errors.New("user ID is required")
+	}
+
+	// Get the user from the repository
+	user, err := c.userRepo.FindByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
