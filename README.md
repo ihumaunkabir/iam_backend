@@ -23,10 +23,24 @@ Registration
 ```go
 POST   /api/v1/register  
 ```
+```json
+{
+	"username": "usernamerequired",
+	"email": "requiredemail",
+	"password": "requiredmin6length"
+}
+```
 Login
 ```go
 POST   /api/v1/login  
 ```
+```json
+{
+	"username": "usernamerequired",
+	"password": "requiredmin6length"
+}
+```
+
 #### Data Model
 ```go
 type User struct {
